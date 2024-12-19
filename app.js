@@ -1,0 +1,100 @@
+const express = require("express");
+const app = express();
+const path = require("path");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const dotEnv = require("dotenv");
+dotEnv.config({ path: "backend/config/config.env" });
+require("./config/database");
+const buildingRoutes = require("./routers/building");
+const sendEmail = require("./utils/sendEmail");
+const userRouter = require("./routers/user");
+const port = process.env.PORT || 4000;
+
+app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "images")));
+
+// ** Set CORS headers after body-parser
+app.use(cors());
+app.use("", (req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "OPTIONS, GET, POST, PUT, PATCH, DELETE"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", true);
+
+  next();
+});
+
+// ** Serve static files from the 'images' directory
+
+app.use("/images", express.static(path.join(__dirname, "images")));
+
+// ** Routes
+app.use("/api", buildingRoutes);
+app.use("/api", userRouter);
+
+//** Contact us form
+app.post("/contact-us", (req, res) => {
+  try {
+    const { name, email, message, subject } = req.body;
+    if (!name || !email || !message || !subject) {
+      return res.status(400).json({
+        success: false,
+        message: "Please fill all the fields",
+      });
+    }
+    const info = sendEmail({ name, email, message, subject });
+    res.status(200).json({
+      success: true,
+      message: "Email sent successfully to the admin",
+      info: {
+        name,
+        email,
+        message,
+        subject,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Email not sent",
+      error,
+    });
+  }
+});
+
+//** Serve the HTML file to the client test
+app.get("/update", (req, res) => {
+  res.sendFile(path.join(__dirname, "update.html"));
+});
+app.get("/create", (req, res) => {
+  res.sendFile(path.join(__dirname, "create.html"));
+});
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "login.html"));
+});
+
+// **Handling of Uncaught exceptions
+process.on("uncaughtException", (err) => {
+  console.log(`ERROR: ${err.message}`);
+  console.log("Shutting down due to uncaught exception ");
+  process.exit(1);
+});
+
+const server = app.listen(port, () =>
+  console.log(`Server is up and running on port : ${port} `)
+);
+
+// **Handle the Unhandled Promise rejections
+process.on("unhandledRejection", (err) => {
+  console.log(`ERROR: ${err.stack}`);
+  console.log("Shutting down the server due to Unhandled Promise rejection");
+  server.close(() => {
+    process.exit(1);
+  });
+});

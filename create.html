@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Upload Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <!-- Form Container -->
+    <section class="w-full max-w-3xl bg-white shadow-lg rounded-lg p-8 my-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center">Building Upload Form</h1>
+        <form action="http://localhost:4000/api/create-building" method="post" 
+    
+         enctype="multipart/form-data"
+            class="space-y-6">
+            <!-- Image Upload -->
+            <div class="flex flex-col">
+                <label for="file" class="font-medium text-gray-700 mb-2">Upload Image:</label>
+                <input type="file" name="image" id="file"
+                multiple
+                    class="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required>
+            </div>
+
+            <!-- Building Details -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Name EN -->
+                <div>
+                    <label for="name_en" class="font-medium text-gray-700 mb-2">Building Name (English):</label>
+                    <input type="text" name="name_en" id="name_en"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                </div>
+                <!-- Name AR -->
+                <div>
+                    <label for="name_ar" class="font-medium text-gray-700 mb-2">Building Name (Arabic):</label>
+                    <input type="text" name="name_ar" id="name_ar"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                </div>
+                <!-- Price -->
+                <div>
+                    <label for="price" class="font-medium text-gray-700 mb-2">Price:</label>
+                    <input type="number" name="price" id="price"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                </div>
+                <!-- Location EN -->
+                <div>
+                    <label for="location_en" class="font-medium text-gray-700 mb-2">Location (English):</label>
+                    <input type="text" name="location_en" id="location_en"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                </div>
+                <!-- Location AR -->
+                <div>
+                    <label for="location_ar" class="font-medium text-gray-700 mb-2">Location (Arabic):</label>
+                    <input type="text" name="location_ar" id="location_ar"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                </div>
+                <!-- City EN -->
+                <div>
+                    <label for="city_en" class="font-medium text-gray-700 mb-2">City (English):</label>
+                    <input type="text" name="city_en" id="city_en"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                </div>
+                <!-- City AR -->
+                <div>
+                    <label for="city_ar" class="font-medium text-gray-700 mb-2">City (Arabic):</label>
+                    <input type="text" name="city_ar" id="city_ar"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div>
+                <label for="description_en" class="font-medium text-gray-700 mb-2">Description (English):</label>
+                <textarea name="description_en" id="description_en" rows="4"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required></textarea>
+            </div>
+            <div>
+                <label for="description_ar" class="font-medium text-gray-700 mb-2">Description (Arabic):</label>
+                <textarea name="description_ar" id="description_ar" rows="4"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    required></textarea>
+            </div>
+
+            <!-- Additional Details -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="type_en" class="font-medium text-gray-700 mb-2">Type (English):</label>
+                    <input type="text" name="type_en" id="type_en"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                </div>
+                <div>
+                    <label for="type_ar" class="font-medium text-gray-700 mb-2">Type (Arabic):</label>
+                    <input type="text" name="type_ar" id="type_ar"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                </div>
+                <div>
+                    <label for="status_en" class="font-medium text-gray-700 mb-2">Status (English):</label>
+                    <input type="text" name="status_en" id="status_en"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                </div>
+                <div>
+                    <label for="status_ar" class="font-medium text-gray-700 mb-2">Status (Arabic):</label>
+                    <input type="text" name="status_ar" id="status_ar"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                </div>
+                <div>
+                    <label for="status_ar" class="font-medium text-gray-700 mb-2">Category (English):</label>
+                    <input type="text" name="category_en" id="status_ar"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                </div>
+                <div>
+                    <label for="status_ar" class="font-medium text-gray-700 mb-2">Category (Arabic):</label>
+                    <input type="text" name="category_ar" id="status_ar"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                        
+                        <!-- Submit Button -->
+                        <div class="flex justify-center">
+                            <button type="submit" 
+                                class="bg-blue-500 text-white font-medium py-2 px-6 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300">
+                                Upload
+                            </button>
+                        </div>
+            </div>
+
+        </form>
+    </section>
+</body>
+
+</html>
