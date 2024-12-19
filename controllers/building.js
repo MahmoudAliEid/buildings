@@ -5,19 +5,25 @@ const createBuilding = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ message: "Image file is required!" });
     }
-    const imagePath = req.file ? req.file.path.replace(/\\/g, "/") : null;
-
+    // ** Check if image is uploaded or and update the image path is array
+    if (req.files) {
+      const files = req.files;
+      let imagesPath = [];
+      files.map((file) => {
+        imagesPath.push(
+          `${process.env.Backend_URL}/${file.path.replace(/\\/g, "/")}`
+        );
+      });
+      req.body.image = imagesPath;
+    }
     const building = await Building.create({
       ...req.body,
-      image: imagePath,
+      image: req.body.image,
     });
-
-    const previewLink = imagePath ? `http://localhost:4000/${imagePath}` : null;
 
     res.status(201).json({
       building,
       message: "Building created successfully",
-      previewLink,
     });
   } catch (error) {
     console.error(error);
@@ -55,7 +61,9 @@ const updateBuilding = async (req, res) => {
     const files = req.files;
     let imagesPath = [];
     files.map((file) => {
-      imagesPath.push(file.path.replace(/\\/g, "/"));
+      imagesPath.push(
+        `${process.env.Backend_URL}/${file.path.replace(/\\/g, "/")}`
+      );
     });
     req.body.image = imagesPath;
   }
