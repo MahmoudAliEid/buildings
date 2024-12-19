@@ -1,15 +1,15 @@
 const express = require("express");
-const app = express();
-const path = require("path");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const dotEnv = require("dotenv");
-dotEnv.config({ path: "backend/config/config.env" });
-require("./config/database");
-const buildingRoutes = require("./routers/building");
 const sendEmail = require("./utils/sendEmail");
+const app = express();
+const path = require("path");
+const dotEnv = require("dotenv");
+const buildingRoutes = require("./routers/building");
 const userRouter = require("./routers/user");
 const port = process.env.PORT || 4000;
+dotEnv.config({ path: "backend/config/config.env" });
+require("./config/database");
 
 app.use(cookieParser());
 app.use(express.json());
@@ -33,6 +33,9 @@ app.use("", (req, res, next) => {
 // ** Serve static files from the 'images' directory
 
 app.use("/images", express.static(path.join(__dirname, "images")));
+app.get("/", (req, res) => {
+  res.send("welcome to backend");
+});
 
 // ** Routes
 app.use("/api", buildingRoutes);
