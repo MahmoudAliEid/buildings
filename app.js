@@ -51,10 +51,9 @@ app.post("/contact-us", (req, res) => {
         message: "Please fill all the fields",
       });
     }
-    const massageWithPhone=`
-      ${massage}, My Phone: ${phone}
+    const massageWithPhone = `${massage}, My Phone: ${phone}
 
-      `
+      `;
     const info = sendEmail({ name, email, massageWithPhone, subject });
     res.status(200).json({
       success: true,
