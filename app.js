@@ -44,14 +44,14 @@ app.use("/api", userRouter);
 //** Contact us form
 app.post("/contact-us", (req, res) => {
   try {
-    const { name, email, message, subject } = req.body;
-    if (!name || !email || !message || !subject) {
+    const { name, email, message, subject, phone } = req.body;
+    if (!name || !email || !message || !subject || !phone) {
       return res.status(400).json({
         success: false,
         message: "Please fill all the fields",
       });
     }
-    const info = sendEmail({ name, email, message, subject });
+    const info = sendEmail({ name, email, message, subject, phone });
     res.status(200).json({
       success: true,
       message: "Email sent successfully to the admin",
