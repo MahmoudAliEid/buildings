@@ -2,6 +2,14 @@ const nodeMailer = require("nodemailer");
 require("dotenv").config();
 
 const sendEmail = async (options) => {
+  if (
+    !process.env.SMTP_EMAIL ||
+    !process.env.SMTP_PASSWORD ||
+    !process.env.SMTP_HOST ||
+    !process.env.SMTP_PORT
+  ) {
+    return "Email not configured";
+  }
   const transporter = nodeMailer.createTransport({
     host: process.env.SMTP_HOST,
     port: process.env.SMTP_PORT,
