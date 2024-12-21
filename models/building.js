@@ -19,7 +19,6 @@ const buildingSchema = new mongoose.Schema({
   price: {
     type: Number,
     required: [true, "Please enter the price of the building"],
-    max: [99999, "Building price cannot exceed 99999"],
     default: 0.0,
   },
   location_en: {
@@ -108,6 +107,18 @@ const buildingSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please provide the Arabic type of the building"],
   },
+  projectType_en: {
+    type: String,
+    required: [true, "Please provide the English project type of the building"],
+  },
+  projectType_ar: {
+    type: String,
+    required: [true, "Please provide the Arabic project type of the building"],
+  },
+  roomsCount: {
+    type: Number,
+    required: [true, "Please provide the number of rooms in the building"],
+  },
   adders_en: {
     type: String,
   },
@@ -133,6 +144,14 @@ const buildingSchema = new mongoose.Schema({
   category_ar: {
     type: String,
     required: [true, "Please provide the Arabic category of the building"],
+  },
+  fishingDate: {
+    type: Date,
+    required: [true, "Please provide the fishing date of the building"],
+  },
+  features: {
+    type: [String],
+    required: [true, "Please provide the features of the building"],
   },
   user: {
     type: mongoose.Schema.ObjectId,
