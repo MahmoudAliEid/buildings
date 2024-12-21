@@ -149,7 +149,7 @@
 
         const formData = new FormData(form);
 
-        const response = await fetch("http://localhost:4000/api/update-building/67630851dbab850f10e73298", {
+        const response = await fetch("https://buildings-swart.vercel.app/api/update-building/67630851dbab850f10e73298", {
             method: "PUT",
             body: formData
         });
