@@ -5,9 +5,7 @@ mongoose.set("strictQuery", true);
 const dotEnv = require("dotenv");
 dotEnv.config({ path: "backend/config/config.env" });
 
-const DATABASE_URL =
-  process.env.ONLINE_DATABASE_URL ||
-  "mongodb+srv://MahmoudAliTech:sm-1562001@building.e2ivn.mongodb.net/?retryWrites=true&w=majority&appName=building";
+const DATABASE_URL = process.env.ONLINE_DATABASE_URL;
 
 if (!DATABASE_URL) {
   console.log(
@@ -17,8 +15,14 @@ if (!DATABASE_URL) {
 }
 
 // Connect to MongoDB using the ONLINE_DATABASE_URL environment variable.
+
 mongoose
-  .connect(DATABASE_URL)
+  .connect(DATABASE_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 5000,
+    tls: true,
+  })
   .then(() => {
     console.log("Connected successfully to MongoDB.");
   })
