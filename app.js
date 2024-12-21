@@ -44,15 +44,15 @@ app.use("/api", userRouter);
 //** Contact us form
 app.post("/contact-us", (req, res) => {
   try {
-    const { name, email, message, subject, phone } = req.body;
-    if (!name || !email || !message || !subject || !phone) {
+    const { name, email, message, subject } = req.body;
+    if (!name || !email || !message || !subject) {
       return res.status(400).json({
         success: false,
         message: "Please fill all the fields",
       });
     }
-    const massageWithPhone = `${message}, My Phone: ${phone}`;
-    const info = sendEmail({ name, email, massageWithPhone, subject });
+
+    const info = sendEmail({ name, email, message, subject });
     res.status(200).json({
       success: true,
       message: "Email sent successfully to the admin",
@@ -61,6 +61,7 @@ app.post("/contact-us", (req, res) => {
         email,
         message,
         subject,
+        info,
       },
     });
   } catch (error) {
