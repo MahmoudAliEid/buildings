@@ -51,7 +51,11 @@ app.post("/contact-us", (req, res) => {
         message: "Please fill all the fields",
       });
     }
-    const info = sendEmail({ name, email, message, subject, phone });
+    const massageWithPhone=`
+      ${massage}, My Phone: ${phone}
+
+      `
+    const info = sendEmail({ name, email, massageWithPhone, subject });
     res.status(200).json({
       success: true,
       message: "Email sent successfully to the admin",
