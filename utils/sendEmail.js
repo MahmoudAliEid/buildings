@@ -1,21 +1,16 @@
-const nodeMailer = require("nodemailer");
+const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 const sendEmail = async (options) => {
-  if (
-    !process.env.SMTP_EMAIL ||
-    !process.env.SMTP_PASSWORD ||
-    !process.env.SMTP_HOST ||
-    !process.env.SMTP_PORT
-  ) {
-    return "Email not configured";
+  if (!process.env.GMAIL_EMAIL || !process.env.GMAIL_PASSWORD) {
+    throw new Error("Gmail email configuration is missing");
   }
-  const transporter = nodeMailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: process.env.SMTP_PORT,
+
+  const transporter = nodemailer.createTransport({
+    service: "Gmail",
     auth: {
-      user: process.env.SMTP_EMAIL,
-      pass: process.env.SMTP_PASSWORD,
+      user: process.env.GMAIL_EMAIL,
+      pass: process.env.GMAIL_PASSWORD,
     },
   });
 
@@ -27,19 +22,19 @@ const sendEmail = async (options) => {
   };
 
   try {
-    await transporter.sendMail(message);
-    const info = `Email sent: ${info.messageId}`;
-    return info;
+    transporter.sendMail(message, (error, info) => {
+      if (error) {
+        console.error(`Error sending email: ${error.message}`);
+        throw new Error("Email could not be sent");
+      } else {
+        console.log(`Email sent: ${info.messageId}`);
+        return `Email sent: ${info.response}`;
+      }
+    });
   } catch (error) {
-    console.error(`Error sending email: ${error.message}`, error);
+    console.error(`Error sending email: ${error.message}`);
     throw new Error("Email could not be sent");
   }
 };
-
-// Handle unhandled promise rejections
-process.on("unhandledRejection", (error) => {
-  console.error(`Unhandled promise rejection: ${error.message}`);
-  process.exit(1);
-});
 
 module.exports = sendEmail;
