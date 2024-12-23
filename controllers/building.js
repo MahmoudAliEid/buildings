@@ -2,9 +2,7 @@ const Building = require("../models/building");
 
 const createBuilding = async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ message: "Image file is required!" });
-    }
+    
     // ** Check if image is uploaded or and update the image path is array
     if (req.files) {
       const files = req.files;
