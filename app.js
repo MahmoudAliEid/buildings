@@ -35,6 +35,9 @@ app.options("*", (req, res) => {
     "Content-Type, Authorization"
   );
   res.setHeader("Access-Control-Allow-Credentials", "true");
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();  
+  }
   res.sendStatus(200);
 });
 
