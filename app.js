@@ -9,7 +9,7 @@ const buildingRoutes = require("./routers/building");
 const userRouter = require("./routers/user");
 const port = process.env.PORT || 4000;
 dotEnv.config({ path: "backend/config/config.env" });
-require("./config/database");
+const { connectToDatabase } = require("./config/database");
 
 app.use(cookieParser());
 app.use(express.json());
@@ -109,9 +109,14 @@ process.on("uncaughtException", (err) => {
   process.exit(1);
 });
 
-const server = app.listen(port, () =>
-  console.log(`Server is up and running on port : ${port} `)
-);
+app.listen(port, async () => {
+  try {
+    await connectToDatabase();
+    console.log(`Server is running on port ${port}`);
+  } catch (error) {
+    console.error("Failed to start server due to database connection issue");
+  }
+});
 
 // **Handle the Unhandled Promise rejections
 process.on("unhandledRejection", (err) => {
