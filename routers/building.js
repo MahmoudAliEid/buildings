@@ -15,7 +15,7 @@ router.post(
   "/create-building",
   // auth,
   // authorizeRoles("admin"),
-  upload.array("images"),
+  upload.array("images"), // Ensure the field name matches the form
   createBuilding
 );
 

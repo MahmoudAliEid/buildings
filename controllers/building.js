@@ -14,7 +14,7 @@ const createBuilding = async (req, res) => {
 
     const building = await Building.create({
       ...req.body,
-      image: imagesPath,
+      images: imagesPath, // Correct field name
     });
 
     res.status(201).json({
@@ -61,7 +61,7 @@ const getBuilding = async (req, res) => {
 //  ** Update a building
 const updateBuilding = async (req, res) => {
   try {
-    let imagesPath = req.body.image || [];
+    let imagesPath = req.body.images || [];
 
     if (req.files?.length) {
       imagesPath = req.files.map((file) => file.path);
@@ -69,7 +69,7 @@ const updateBuilding = async (req, res) => {
 
     const building = await Building.findByIdAndUpdate(
       req.params.id,
-      { ...req.body, image: imagesPath },
+      { ...req.body, images: imagesPath }, // Correct field name
       { new: true, runValidators: true }
     );
 
