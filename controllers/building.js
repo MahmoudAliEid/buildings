@@ -1,33 +1,12 @@
 const Building = require("../models/building");
-const cloudinary = require("cloudinary").v2;
 
-// Configure Cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
+// ** Create a new building
 const createBuilding = async (req, res) => {
   try {
     console.log(req.body, "body");
     console.log(req.files, "files");
-    let imagesPath = [];
 
-    if (req.files && req.files.length > 0) {
-      console.log("Uploading files to Cloudinary...");
-      try {
-        const uploadPromises = req.files.map((file) =>
-          cloudinary.uploader.upload(file.path, { folder: "buildings" })
-        );
-        const uploadResults = await Promise.all(uploadPromises);
-        imagesPath = uploadResults.map((result) => result.secure_url);
-      } catch (error) {
-        console.error("Cloudinary upload failed:", error);
-        return res.status(500).json({ message: "Image upload failed" });
-      }
-    }
-    console.log(imagesPath, "imagesPath");
+    const imagesPath = req.files.map((file) => file.path);
 
     const building = await Building.create({
       ...req.body,
@@ -39,13 +18,13 @@ const createBuilding = async (req, res) => {
       message: "Building created successfully",
     });
   } catch (error) {
-    console.error("Error:", error);
-    res
-      .status(500)
-      .json({ message: "Internal Server Error", error: error.message });
+    console.error("Error creating building:", error);
+
+    res.status(400).json({ message: error.message });
   }
 };
 
+// ** Fetch all buildings
 const getBuildings = async (req, res) => {
   try {
     const buildings = await Building.find();
@@ -56,9 +35,12 @@ const getBuildings = async (req, res) => {
       count: buildings.length,
     });
   } catch (error) {
+    console.error("Error fetching buildings:", error);
     res.status(400).json({ message: error.message });
   }
 };
+
+// ** Fetch a single building
 const getBuilding = async (req, res) => {
   try {
     const building = await Building.findById(req.params.id);
@@ -67,42 +49,50 @@ const getBuilding = async (req, res) => {
     }
     res.status(200).json({ building });
   } catch (error) {
+    console.error("Error fetching building:", error);
     res.status(400).json({ message: error.message });
   }
 };
+
+//  ** Update a building
 const updateBuilding = async (req, res) => {
   try {
     let imagesPath = req.body.image || [];
-    if (req.files && req.files.length > 0) {
-      const uploadResults = await Promise.all(
-        req.files.map((file) =>
-          cloudinary.uploader.upload(file.path, { folder: "buildings" })
-        )
-      );
-      imagesPath = uploadResults.map((result) => result.secure_url);
+
+    if (req.files?.length) {
+      imagesPath = req.files.map((file) => file.path);
     }
+
     const building = await Building.findByIdAndUpdate(
       req.params.id,
       { ...req.body, image: imagesPath },
       { new: true, runValidators: true }
     );
+
     if (!building) {
       return res.status(404).json({ message: "Building not found" });
     }
-    res
-      .status(200)
-      .json({ building, message: "Building updated successfully" });
+
+    res.status(200).json({
+      building,
+      message: "Building updated successfully",
+    });
   } catch (error) {
-    console.error(error);
+    console.error("Error updating building:", error);
     res.status(400).json({ message: error.message });
   }
 };
 
+// ** Delete a building
 const deleteBuilding = async (req, res) => {
   try {
-    await Building.findByIdAndDelete(req.params.id);
+    const building = await Building.findByIdAndDelete(req.params.id);
+    if (!building) {
+      return res.status(404).json({ message: "Building not found" });
+    }
     res.status(200).json({ message: "Building deleted successfully" });
   } catch (error) {
+    console.error("Error deleting building:", error);
     res.status(400).json({ message: error.message });
   }
 };

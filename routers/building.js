@@ -10,6 +10,7 @@ const {
   deleteBuilding,
 } = require("../controllers/building");
 
+// ** Create a building (Admin only)
 router.post(
   "/create-building",
   auth,
@@ -17,10 +18,14 @@ router.post(
   upload.array("images"),
   createBuilding
 );
+
+// ** Fetch all buildings
 router.get("/buildings", getBuildings);
 
+// ** Fetch a single building by ID
 router.get("/building/:id", getBuilding);
 
+// ** Update a building (Admin only)
 router.put(
   "/update-building/:id",
   auth,
@@ -29,6 +34,7 @@ router.put(
   updateBuilding
 );
 
+// ** Delete a building (Admin only)
 router.delete(
   "/delete-building/:id",
   auth,
