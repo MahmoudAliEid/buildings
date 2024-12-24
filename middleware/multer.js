@@ -30,7 +30,7 @@ const upload = multer({
     const fileTypes = /jpeg|jpg|png/;
     const extname = fileTypes.test(file.originalname.toLowerCase());
     const mimetype = fileTypes.test(file.mimetype);
-    if (extname && mimetype) {
+    if (extname && mimetype && file.fieldname === "images") {
       return cb(null, true);
     }
     cb(new Error("Only image files are allowed"));

@@ -115,7 +115,7 @@ const buildingSchema = new mongoose.Schema({
   },
   hand_over: {
     type: String,
-    required: [true, "Please provide the fishing date of the building"],
+    // required: [true, "Please provide the fishing date of the building"],
   },
   features_en: {
     type: [String],
