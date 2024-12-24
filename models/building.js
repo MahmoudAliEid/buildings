@@ -16,10 +16,26 @@ const buildingSchema = new mongoose.Schema({
     minlength: [3, "Building name cannot be less than 3 characters"],
     maxlength: [100, "Building name cannot exceed 100 characters"],
   },
-  price: {
-    type: Number,
+  type_en: {
+    type: String,
+    required: [true, "Please provide the English type of the building"],
+  },
+  type_ar: {
+    type: String,
+    required: [true, "Please provide the Arabic type of the building"],
+  },
+  status_en: {
+    type: String,
+    required: [true, "Please provide the English status of the building"],
+  },
+  status_ar: {
+    type: String,
+    required: [true, "Please provide the Arabic status of the building"],
+  },
+  starting_price: {
+    type: String,
     required: [true, "Please enter the price of the building"],
-    default: 0.0,
+    default: "0.0 AED",
   },
   location_en: {
     type: String,
@@ -45,37 +61,11 @@ const buildingSchema = new mongoose.Schema({
     trim: true,
     maxlength: [100, "City name cannot exceed 100 characters"],
   },
-  goToLocation: {
+  goToLocation_en: {
     type: String,
   },
-  description_en: {
+  goToLocation_ar: {
     type: String,
-    required: [true, "Please enter the English description of the building"],
-  },
-  description_ar: {
-    type: String,
-    required: [true, "Please enter the Arabic description of the building"],
-  },
-  title_en: {
-    type: String,
-
-    trim: true,
-    maxlength: [100, "Title cannot exceed 100 characters"],
-  },
-  title_ar: {
-    type: String,
-
-    trim: true,
-    maxlength: [100, "Title cannot exceed 100 characters"],
-  },
-  studio_en: {
-    type: String,
-    default: "Fully Furnished Studio",
-  },
-  studio_ar: {
-    type: String,
-    required: [true, "Please provide the Arabic studio details"],
-    default: "استوديو مفروش بالكامل",
   },
   size_en: {
     type: String,
@@ -99,41 +89,19 @@ const buildingSchema = new mongoose.Schema({
     type: String,
     default: "20٪ دفعة مقدمة",
   },
-  type_en: {
+  description_en: {
     type: String,
-    required: [true, "Please provide the English type of the building"],
+    required: [true, "Please enter the English description of the building"],
   },
-  type_ar: {
+  description_ar: {
     type: String,
-    required: [true, "Please provide the Arabic type of the building"],
-  },
-  projectType_en: {
-    type: String,
-    required: [true, "Please provide the English project type of the building"],
-  },
-  projectType_ar: {
-    type: String,
-    required: [true, "Please provide the Arabic project type of the building"],
+    required: [true, "Please enter the Arabic description of the building"],
   },
   roomsCount: {
     type: Number,
     required: [true, "Please provide the number of rooms in the building"],
   },
-  adders_en: {
-    type: String,
-  },
-  adders_ar: {
-    type: String,
-  },
-  status_en: {
-    type: String,
-    required: [true, "Please provide the English status of the building"],
-  },
-  status_ar: {
-    type: String,
-    required: [true, "Please provide the Arabic status of the building"],
-  },
-  image: {
+  images: {
     type: [String],
     required: [true, "Please upload images for the building"],
   },
@@ -145,13 +113,25 @@ const buildingSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please provide the Arabic category of the building"],
   },
-  fishingDate: {
-    type: Date,
+  hand_over: {
+    type: String,
     required: [true, "Please provide the fishing date of the building"],
   },
-  features: {
+  features_en: {
     type: [String],
     required: [true, "Please provide the features of the building"],
+  },
+  features_ar: {
+    type: [String],
+    required: [true, "Please provide the features of the building"],
+  },
+  developer_en: {
+    type: String,
+    required: [true, "Please provide the English developer name"],
+  },
+  developer_ar: {
+    type: String,
+    required: [true, "Please provide the Arabic developer name"],
   },
   user: {
     type: mongoose.Schema.ObjectId,

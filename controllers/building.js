@@ -10,19 +10,25 @@ cloudinary.config({
 
 const createBuilding = async (req, res) => {
   try {
+    console.log(req.body, "body");
+    console.log(req.files, "files");
     let imagesPath = [];
 
     // ** Upload files to Cloudinary
     if (req.files && req.files.length > 0) {
-      const uploadPromises = req.files.map((file) =>
-        cloudinary.uploader.upload(file.path, {
-          folder: "buildings",
-        })
-      );
-
-      const uploadResults = await Promise.all(uploadPromises);
-      imagesPath = uploadResults.map((result) => result.secure_url);
+      console.log("Uploading files to Cloudinary...");
+      try {
+        const uploadPromises = req.files.map((file) =>
+          cloudinary.uploader.upload(file.path, { folder: "buildings" })
+        );
+        const uploadResults = await Promise.all(uploadPromises);
+        imagesPath = uploadResults.map((result) => result.secure_url);
+      } catch (error) {
+        console.error("Cloudinary upload failed:", error);
+        return res.status(500).json({ message: "Image upload failed" });
+      }
     }
+    console.log(imagesPath, "imagesPath");
 
     const building = await Building.create({
       ...req.body,
@@ -64,43 +70,29 @@ const getBuilding = async (req, res) => {
   }
 };
 const updateBuilding = async (req, res) => {
-  // ** Check if image is uploaded or and update the image path is array
-  if (req.files) {
-    let imagesPath = [];
-
-    // ** Upload files to Cloudinary
+  try {
+    let imagesPath = req.body.image || [];
     if (req.files && req.files.length > 0) {
-      const uploadPromises = req.files.map((file) =>
-        cloudinary.uploader.upload(file.path, {
-          folder: "buildings",
-        })
+      const uploadResults = await Promise.all(
+        req.files.map((file) =>
+          cloudinary.uploader.upload(file.path, { folder: "buildings" })
+        )
       );
-
-      const uploadResults = await Promise.all(uploadPromises);
       imagesPath = uploadResults.map((result) => result.secure_url);
     }
-    req.body.image = imagesPath;
-  }
-
-  try {
     const building = await Building.findByIdAndUpdate(
       req.params.id,
-      {
-        ...req.body,
-        image: req.body.image,
-      },
-      {
-        new: true,
-        runValidators: true,
-      }
+      { ...req.body, image: imagesPath },
+      { new: true, runValidators: true }
     );
-    res.status(200).json({
-      building,
-      message: "Building updated successfully",
-      id: req.params.id,
-      reqBody: req.body,
-    });
+    if (!building) {
+      return res.status(404).json({ message: "Building not found" });
+    }
+    res
+      .status(200)
+      .json({ building, message: "Building updated successfully" });
   } catch (error) {
+    console.error(error);
     res.status(400).json({ message: error.message });
   }
 };

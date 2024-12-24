@@ -1,4 +1,10 @@
 const multer = require("multer");
+const fs = require("fs");
+
+// Ensure "images/" directory exists
+if (!fs.existsSync("images")) {
+  fs.mkdirSync("images");
+}
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "images/");
@@ -15,7 +21,7 @@ const upload = multer({
     fileSize: 1024 * 1024 * 5,
   },
   fileFilter: function (req, file, cb) {
-    console.log("File received:", file); // Debug log
+    console.log("File received by Multer:", file);
     const fileTypes = /jpeg|jpg|png/;
     const extname = fileTypes.test(file.originalname.toLowerCase());
     const mimetype = fileTypes.test(file.mimetype);
