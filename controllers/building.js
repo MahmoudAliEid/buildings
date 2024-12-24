@@ -10,20 +10,29 @@ cloudinary.config({
 
 const createBuilding = async (req, res) => {
   try {
-    console.log(req.body,'body')
+    console.log("Received body:", req.body);
+    console.log("Received files:", req.files);
+
     let imagesPath = [];
 
-    // ** Upload files to Cloudinary
     if (req.files && req.files.length > 0) {
       const uploadPromises = req.files.map((file) =>
         cloudinary.uploader.upload(file.path, {
-          folder: "buildings",
-        }) .then((result) => console.log(result))
-  .catch((err) => console.error(err));
+          folder: 'buildings',
+        })
+        .then((result) => {
+          console.log('Cloudinary upload result:', result); // Log Cloudinary response
+          return result.secure_url;
+        })
+        .catch((err) => {
+          console.error('Cloudinary error:', err); // Log Cloudinary error
+          throw err; // Propagate the error
+        })
       );
 
       const uploadResults = await Promise.all(uploadPromises);
-      imagesPath = uploadResults.map((result) => result.secure_url);
+      imagesPath = uploadResults;
+      console.log('Uploaded image URLs:', imagesPath);
     }
 
     const building = await Building.create({
@@ -33,16 +42,14 @@ const createBuilding = async (req, res) => {
 
     res.status(201).json({
       building,
-      body:req.body,
-      files:req.files,
-      message: "Building created successfully",
+      message: 'Building created successfully',
     });
   } catch (error) {
-    console.error(error);
-    // res.status(400).json({ message: error.message });
-    res.status(500).json({ message: "Internal Server Error", error: err.message });
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
   }
 };
+
 
 const getBuildings = async (req, res) => {
   try {
