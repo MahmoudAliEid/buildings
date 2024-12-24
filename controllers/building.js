@@ -14,7 +14,6 @@ const createBuilding = async (req, res) => {
     console.log(req.files, "files");
     let imagesPath = [];
 
-    // ** Upload files to Cloudinary
     if (req.files && req.files.length > 0) {
       console.log("Uploading files to Cloudinary...");
       try {
@@ -40,8 +39,10 @@ const createBuilding = async (req, res) => {
       message: "Building created successfully",
     });
   } catch (error) {
-    console.error(error);
-    res.status(400).json({ message: error.message });
+    console.error("Error:", error);
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
   }
 };
 
