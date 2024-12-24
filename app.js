@@ -17,7 +17,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "images")));
 
 // ** Set CORS headers after body-parser
-app.use(cors());
+const corsOptions = {
+  origin: "http://localhost:3000", 
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true, 
+};
+app.use(cors(corsOptions));
 app.use("", (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
