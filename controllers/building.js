@@ -1,22 +1,32 @@
 const Building = require("../models/building");
+const cloudinary = require("cloudinary").v2;
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const createBuilding = async (req, res) => {
   try {
-    
-    // ** Check if image is uploaded or and update the image path is array
-    if (req.files) {
-      const files = req.files;
-      let imagesPath = [];
-      files.map((file) => {
-        imagesPath.push(
-          `${process.env.Backend_URL}/${file.path.replace(/\\/g, "/")}`
-        );
-      });
-      req.body.image = imagesPath;
+    let imagesPath = [];
+
+    // ** Upload files to Cloudinary
+    if (req.files && req.files.length > 0) {
+      const uploadPromises = req.files.map((file) =>
+        cloudinary.uploader.upload(file.path, {
+          folder: "buildings",
+        })
+      );
+
+      const uploadResults = await Promise.all(uploadPromises);
+      imagesPath = uploadResults.map((result) => result.secure_url);
     }
+
     const building = await Building.create({
       ...req.body,
-      image: req.body.image,
+      image: imagesPath,
     });
 
     res.status(201).json({
@@ -56,13 +66,19 @@ const getBuilding = async (req, res) => {
 const updateBuilding = async (req, res) => {
   // ** Check if image is uploaded or and update the image path is array
   if (req.files) {
-    const files = req.files;
     let imagesPath = [];
-    files.map((file) => {
-      imagesPath.push(
-        `${process.env.Backend_URL}/${file.path.replace(/\\/g, "/")}`
+
+    // ** Upload files to Cloudinary
+    if (req.files && req.files.length > 0) {
+      const uploadPromises = req.files.map((file) =>
+        cloudinary.uploader.upload(file.path, {
+          folder: "buildings",
+        })
       );
-    });
+
+      const uploadResults = await Promise.all(uploadPromises);
+      imagesPath = uploadResults.map((result) => result.secure_url);
+    }
     req.body.image = imagesPath;
   }
 
