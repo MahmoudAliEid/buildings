@@ -18,7 +18,8 @@ const createBuilding = async (req, res) => {
       const uploadPromises = req.files.map((file) =>
         cloudinary.uploader.upload(file.path, {
           folder: "buildings",
-        })
+        }) .then((result) => console.log(result))
+  .catch((err) => console.error(err));
       );
 
       const uploadResults = await Promise.all(uploadPromises);
@@ -33,6 +34,7 @@ const createBuilding = async (req, res) => {
     res.status(201).json({
       building,
       body:req.body,
+      files:req.files,
       message: "Building created successfully",
     });
   } catch (error) {
