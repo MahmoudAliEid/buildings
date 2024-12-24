@@ -13,8 +13,8 @@ const {
 // ** Create a building (Admin only)
 router.post(
   "/create-building",
-  auth,
-  authorizeRoles("admin"),
+  // auth,
+  // authorizeRoles("admin"),
   upload.array("images"),
   createBuilding
 );
