@@ -2,6 +2,10 @@ const Building = require("../models/building");
 
 // ** Create a new building
 const createBuilding = async (req, res) => {
+  // Ensure that images are uploaded as expected
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ message: "No images uploaded." });
+  }
   try {
     console.log(req.body, "body");
     console.log(req.files, "files");
