@@ -14,7 +14,7 @@ router.post(
   "/create-building",
   auth,
   authorizeRoles("admin"),
-  upload.array("image"),
+
   createBuilding
 );
 router.get("/buildings", getBuildings);
