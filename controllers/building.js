@@ -10,6 +10,7 @@ cloudinary.config({
 
 const createBuilding = async (req, res) => {
   try {
+    console.log(req.body,'body')
     let imagesPath = [];
 
     // ** Upload files to Cloudinary
