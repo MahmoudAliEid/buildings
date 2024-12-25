@@ -2,12 +2,14 @@ const express = require("express");
 const router = express.Router();
 const upload = require("../middleware/multer");
 const { auth, authorizeRoles } = require("../middleware/auth");
+
 const {
   createBuilding,
   getBuildings,
   getBuilding,
   updateBuilding,
   deleteBuilding,
+  deleteImageFromCloudinary,
 } = require("../controllers/building");
 
 // ** Create a building (Admin only)
@@ -40,6 +42,14 @@ router.delete(
   auth,
   authorizeRoles("admin"),
   deleteBuilding
+);
+
+// ** handle delete image
+router.post(
+  "/delete-image",
+  auth,
+  authorizeRoles("admin"),
+  deleteImageFromCloudinary
 );
 
 module.exports = router;

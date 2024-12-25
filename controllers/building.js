@@ -1,4 +1,5 @@
 const Building = require("../models/building");
+const { v2: cloudinary } = require("cloudinary");
 
 // ** Create a new building
 const createBuilding = async (req, res) => {
@@ -100,6 +101,38 @@ const deleteBuilding = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+const deleteImageFromCloudinary = async (req, res) => {
+  try {
+    const { imageUrl } = req.body;
+    if (!publicId) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide the publicId",
+      });
+    }
+    const publicId = imageUrl.split("/")[7].split(".")[0];
+    cloudinary.uploader.destroy(publicId, (error, result) => {
+      if (error) {
+        return res.status(400).json({
+          success: false,
+          message: "Image not deleted",
+          error,
+        });
+      }
+      res.status(200).json({
+        success: true,
+        message: "Image deleted successfully",
+        result,
+      });
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Image not deleted",
+      error,
+    });
+  }
+};
 
 module.exports = {
   createBuilding,
@@ -107,4 +140,5 @@ module.exports = {
   getBuilding,
   updateBuilding,
   deleteBuilding,
+  deleteImageFromCloudinary,
 };
