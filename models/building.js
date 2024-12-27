@@ -41,9 +41,9 @@ const buildingSchema = new mongoose.Schema({
     required: [true, "Please provide the Arabic status of the building"],
   },
   starting_price: {
-    type: String,
+    type: Number,
     required: [true, "Please enter the price of the building"],
-    default: "0.0 AED",
+    default: 0.0,
   },
   city_en: {
     type: String,
@@ -63,21 +63,13 @@ const buildingSchema = new mongoose.Schema({
   size_ar: {
     type: String,
   },
-  paymentPlan_en: {
+  paymentPlan: {
     type: String,
     default: "12 months installment",
   },
-  paymentPlan_ar: {
-    type: String,
-    default: "تقسيط على 12 شهر",
-  },
-  downPayment_en: {
-    type: String,
-    default: "20% down payment",
-  },
-  downPayment_ar: {
-    type: String,
-    default: "20٪ دفعة مقدمة",
+  downPayment: {
+    type: number,
+  
   },
   description_en: {
     type: String,
