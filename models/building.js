@@ -68,7 +68,7 @@ const buildingSchema = new mongoose.Schema({
     default: "12 months installment",
   },
   downPayment: {
-    type: number,
+    type: Number,
   
   },
   description_en: {
