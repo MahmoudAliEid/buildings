@@ -18,7 +18,7 @@ app.use(express.static(path.join(__dirname, "images")));
 
 // ** Set CORS headers after body-parser
 const corsOptions = {
-   origin: ["https://www.newgoldenfuture.com","https://newgoldenfuture.com", "http://localhost:3000"], ,
+   origin: ["https://www.newgoldenfuture.com","https://newgoldenfuture.com", "http://localhost:3000"], 
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
