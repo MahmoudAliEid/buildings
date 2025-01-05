@@ -17,26 +17,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "images")));
 
 // ** Set CORS headers after body-parser
-const allowedOrigins = [
-  "https://www.newgoldenfuture.com",
-  "https://newgoldenfuture.com",
-  "http://localhost:3000",
-];
-
 const corsOptions = {
-  origin: (origin, callback) => {
-    if (allowedOrigins.includes(origin) || !origin) {
-      callback(null, origin);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  origin: true, 
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
+  credentials: true, 
 };
 
 app.use(cors(corsOptions));
+
+
 
 app.use((req, res, next) => {
   console.log("Request Origin:", req.headers.origin);
